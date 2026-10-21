@@ -1,3 +1,6 @@
+# One grouped PR per ecosystem per week instead of one PR per package.
+# Major npm upgrades (React, Vite, Vitest) move together and break CI when
+# bumped one at a time, so they're done by hand as a coordinated upgrade.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -7,6 +10,9 @@ updates:
     commit-message:
       prefix: ci
     labels: [dependencies]
+    groups:
+      actions:
+        patterns: ["*"]
 
   - package-ecosystem: npm
     directory: /
@@ -15,3 +21,9 @@ updates:
     commit-message:
       prefix: deps
     labels: [dependencies]
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
